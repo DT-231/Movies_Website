@@ -30,7 +30,7 @@ function Header() {
     }, []);
 
     return (
-        <header className="flex 2xl:justify-around justify-between items-center px-5 sm:px-10 py-3 sm:py-5 bg-primary text-white relative">
+        <header className="flex 2xl:justify-around justify-between items-center px-5 w-screen sm:px-10 py-3 sm:py-5 bg-primary text-white relative">
             {/* Logo */}
             <Link to="/" className="w-24 sm:w-3xs cursor-pointer">
                 <img src={imgs.logo} alt="PinkLlix-Web xem phim trực tuyến miễn phí" />

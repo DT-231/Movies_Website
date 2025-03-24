@@ -46,7 +46,7 @@ const VideoPlayer = ({
 
     return (
         <ReactPlayer
-            playsinline
+            playsinline // Thêm thuộc tính này để hỗ trợ iOS
             onMouseOver={onMouseOver} // Xử lý khi di chuột vào trình phát
             onMouseOut={onMouseOut} // Xử lý khi rời chuột khỏi trình phát
             config={{
@@ -63,11 +63,10 @@ const VideoPlayer = ({
             muted={muted} // Trạng thái tắt/bật âm thanh
             onProgress={onProgress} // Gửi tiến trình phát lại
             onDuration={onDuration} // Lấy tổng thời lượng video
-            width="100%" // Chiều rộng video
-            height={fullScreen ? "100vh" : "90vw"} // Chiều cao video theo chế độ toàn màn hình hoặc bình thường
+            width="100vw" // Đảm bảo video chiếm toàn bộ chiều rộng màn hình
+            height={fullScreen ? "100vh" : "56.25vw"} // Tỷ lệ 16:9 khi không ở chế độ toàn màn hình
             style={{
-                maxHeight: fullScreen ? "100vh" : "100vh", // Giới hạn chiều cao video
-                // Màu nền của trình phát
+                maxHeight: fullScreen ? "100vh" : "100vh", // Đảm bảo không bị hở
             }}
         />
     );

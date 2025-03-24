@@ -45,7 +45,7 @@ function Home() {
     }, []);
 
     return (
-        <div className="bg-secondary w-full h-auto py-10">
+        <div className="bg-secondary w-100vw h-auto py-10">
             {/* Phim mới */}
             <FilmSection title="Phim mới cập nhật" films={filmNewList} line={false} />
 

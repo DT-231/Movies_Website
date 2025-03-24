@@ -225,7 +225,7 @@ function FilmViewer() {
     return (
         <div
             ref={containerRef}
-            className={`bg-secondary min-h-screen flex flex-col gap-10 ${!fullScreen && "py-30 "}pb-[10px]`}
+            className={`bg-secondary min-h-screen w-screen flex flex-col gap-10 ${!fullScreen && "py-30 "}pb-[10px]`}
         >
             <div className="flex flex-col items-center justify-center">
                 <div className={`w-full ${!fullScreen && "max-w-7xl"}`}>
