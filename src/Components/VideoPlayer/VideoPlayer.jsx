@@ -46,12 +46,13 @@ const VideoPlayer = ({
 
     return (
         <ReactPlayer
+            playsinline
             onMouseOver={onMouseOver} // Xử lý khi di chuột vào trình phát
             onMouseOut={onMouseOut} // Xử lý khi rời chuột khỏi trình phát
             config={{
                 file: {
-                    forceHLS: true, // Bắt buộc sử dụng HLS
-                    hlsOptions: { debug: false }, // Tắt debug để tránh log thừa
+                    forceHLS: !navigator.userAgent.includes("Safari"),
+                    hlsOptions: { debug: false },
                 },
             }}
             ref={playerRef} // Gán tham chiếu đến trình phát
