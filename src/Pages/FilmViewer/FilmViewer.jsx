@@ -53,8 +53,9 @@ function FilmViewer() {
     // Theo dõi sự thay đổi trạng thái toàn màn hình
     useEffect(() => {
         const handleFullScreenChange = () => {
-            setFullScreen(!!document.fullscreenElement);
+            setFullScreen(!!(document.fullscreenElement || document.webkitFullscreenElement));
         };
+
         document.addEventListener("fullscreenchange", handleFullScreenChange);
         return () => document.removeEventListener("fullscreenchange", handleFullScreenChange);
     }, []);
