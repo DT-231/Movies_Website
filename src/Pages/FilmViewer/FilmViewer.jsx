@@ -6,26 +6,37 @@ import { getFilmDetail } from "../../Service/FilmService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 import EpisodesSelection from "../../Common/EpisodesSelection/EpisodesSelection";
+
+// Component chính quản lý việc xem phim, hiển thị thông tin và điều khiển
 function FilmViewer() {
+    // Lấy các thông số từ URL (tên phim, tập và server)
     const { slugFilm, episode, server } = useParams();
-    const [film, setFilm] = useState(null);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isMuted, setIsMuted] = useState(false);
-    const [volume, setVolume] = useState(0.5);
-    const [lastVolume, setLastVolume] = useState(0.5);
-    const [played, setPlayed] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [fullScreen, setFullScreen] = useState(false);
-    const [showVolumeSlider, setShowVolumeSlider] = useState(false);
-    const playerRef = useRef(null);
-    const containerRef = useRef(null);
-    const volumeContainerRef = useRef(null);
-    const startY = useRef(null);
-    const [videoSrc, setVideoSrc] = useState("");
-    const [ShowProcessBaar, setShowProcessBar] = useState(true);
-    const timeoutRef = useRef(null);
-    const [loading, setLoading] = useState(false);
-    const [epsFilm, setepsFilm] = useState(null);
+
+    // Khai báo các state quản lý thông tin phim
+    const [film, setFilm] = useState(null); // Lưu thông tin chi tiết phim
+    const [isPlaying, setIsPlaying] = useState(false); // Trạng thái đang phát hay dừng
+    const [isMuted, setIsMuted] = useState(false); // Trạng thái tắt tiếng
+    const [volume, setVolume] = useState(0.5); // Âm lượng hiện tại (0-1)
+    const [lastVolume, setLastVolume] = useState(0.5); // Lưu âm lượng trước khi tắt tiếng
+    const [played, setPlayed] = useState(0); // Tiến độ phát (0-1)
+    const [duration, setDuration] = useState(0); // Tổng thời gian của video
+    const [fullScreen, setFullScreen] = useState(false); // Trạng thái toàn màn hình
+    const [showVolumeSlider, setShowVolumeSlider] = useState(false); // Hiển thị thanh điều chỉnh âm lượng
+
+    // Các tham chiếu đến DOM elements
+    const playerRef = useRef(null); // Tham chiếu đến player
+    const containerRef = useRef(null); // Tham chiếu đến container
+    const volumeContainerRef = useRef(null); // Tham chiếu đến container điều chỉnh âm lượng
+    const startY = useRef(null); // Lưu vị trí bắt đầu khi kéo thanh âm lượng
+
+    // State quản lý nguồn video và giao diện
+    const [videoSrc, setVideoSrc] = useState(""); // Đường dẫn video
+    const [ShowProcessBaar, setShowProcessBar] = useState(true); // Hiển thị thanh điều khiển
+    const timeoutRef = useRef(null); // Tham chiếu đến timeout ẩn thanh điều khiển
+    const [loading, setLoading] = useState(false); // Trạng thái đang tải
+    const [epsFilm, setepsFilm] = useState(null); // Tên tập phim
+
+    // Lấy thông tin chi tiết phim từ API khi slug hoặc tập thay đổi
     useEffect(() => {
         const fetchFilm = async () => {
             try {
@@ -39,6 +50,7 @@ function FilmViewer() {
         fetchFilm();
     }, [slugFilm, episode]);
 
+    // Theo dõi sự thay đổi trạng thái toàn màn hình
     useEffect(() => {
         const handleFullScreenChange = () => {
             setFullScreen(!!document.fullscreenElement);
@@ -47,6 +59,7 @@ function FilmViewer() {
         return () => document.removeEventListener("fullscreenchange", handleFullScreenChange);
     }, []);
 
+    // Xử lý việc click ngoài thanh âm lượng để ẩn nó
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (volumeContainerRef.current && !volumeContainerRef.current.contains(event.target)) {
@@ -57,6 +70,7 @@ function FilmViewer() {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
+    // Xử lý thay đổi phim hoặc tập, cập nhật nguồn video
     useEffect(() => {
         setLoading(true);
 
@@ -64,19 +78,22 @@ function FilmViewer() {
 
         let serverData = null;
         let selectedEpisodeData = null;
-        // Kiểm tra server Vietsub hay Thuyet Minh (TM)
+
+        // Kiểm tra server Vietsub hay Thuyết Minh (TM)
         if (server?.includes("TM")) {
             serverData = film.episodes?.[1]?.server_data;
         } else if (server?.includes("vietsub")) {
             serverData = film.episodes?.[0]?.server_data;
         }
-        // tìm episode nếu ko phải phim tập sẽ lấy cái đầu tiên của sever
+
+        // Tìm episode nếu không phải phim lẻ sẽ lấy tập đầu tiên của server
         if (episode !== "full") {
             selectedEpisodeData = serverData?.find((ep) => ep.slug === episode);
         } else {
             selectedEpisodeData = serverData[0];
         }
-        // Set up link chiếu video
+
+        // Thiết lập link chiếu video
         setepsFilm(selectedEpisodeData?.name);
         if (selectedEpisodeData?.link_m3u8) {
             setVideoSrc(selectedEpisodeData.link_m3u8);
@@ -87,33 +104,38 @@ function FilmViewer() {
         setLoading(false);
     }, [film, episode, server]);
 
-    // Skip 10s video
+    // Tua nhanh video 10 giây
     const seekForward = () => {
         const currentTime = playerRef.current.getCurrentTime();
         playerRef.current.seekTo(currentTime + 10, "seconds");
     };
 
-    // Go back 10 seconds
+    // Tua lùi video 10 giây
     const seekBackward = () => {
         const currentTime = playerRef.current.getCurrentTime();
         playerRef.current.seekTo(currentTime - 10, "seconds");
     };
 
+    // Theo dõi tiến độ phát video
     const handleProgress = (state) => setPlayed(state.played);
 
+    // Xử lý khi người dùng kéo thanh tiến độ
     const handleSeek = (e) => {
         const newTime = parseFloat(e.target.value);
         setPlayed(newTime);
         playerRef.current.seekTo(newTime, "fraction");
     };
 
+    // Cập nhật tổng thời gian của video
     const handleDuration = (duration) => setDuration(duration);
-    // bắt đầu chỉnh thanh
+
+    // Bắt đầu chỉnh thanh âm lượng trên thiết bị cảm ứng
     const handleTouchStart = (e) => {
         startY.current = e.touches[0].clientY;
         e.preventDefault();
     };
-    //Tăng chỉnh thanh âm lượng
+
+    // Tăng giảm âm lượng khi di chuyển ngón tay
     const handleTouchMove = (e) => {
         if (!startY.current) return;
         e.preventDefault();
@@ -122,14 +144,16 @@ function FilmViewer() {
         setVolume(newVolume);
         if (!isMuted) setLastVolume(newVolume);
     };
-    // kết thúc việc tăng chỉnh
+
+    // Kết thúc việc điều chỉnh âm lượng
     const handleTouchEnd = () => {
         startY.current = null;
     };
-    // play / pause VideoVideo
+
+    // Phát hoặc tạm dừng video
     const handlePlayPause = () => setIsPlaying(!isPlaying);
 
-    // Tắt âm lượng (click vào biểu tượng âm thanh)
+    // Tắt/bật âm lượng (click vào biểu tượng âm thanh)
     const handleMute = () => {
         if (!isMuted) {
             setLastVolume(volume);
@@ -139,10 +163,10 @@ function FilmViewer() {
         }
     };
 
-    //Hiên thanh chỉ âm lượng
+    // Hiển thị/ẩn thanh điều chỉnh âm lượng
     const toggleVolumeSlider = () => setShowVolumeSlider(!showVolumeSlider);
 
-    // Tăng chỉnh âm lượnglượng
+    // Điều chỉnh âm lượng
     const handleVolumeChange = (e) => {
         const newVolume = parseFloat(e.target.value);
         setVolume(newVolume);
@@ -150,7 +174,7 @@ function FilmViewer() {
         if (!isMuted) setLastVolume(newVolume);
     };
 
-    // Event full màn hình
+    // Bật/tắt chế độ toàn màn hình
     const toggleFullScreen = () => {
         if (videoSrc) {
             if (!document.fullscreenElement) {
@@ -162,7 +186,8 @@ function FilmViewer() {
             }
         }
     };
-    // Hiện thời gian phim đang chiếu
+
+    // Định dạng thời gian thành MM:SS
     const formatTime = (seconds) => {
         if (!seconds) return "00:00";
         const minutes = Math.floor(seconds / 60);
@@ -170,6 +195,7 @@ function FilmViewer() {
         return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
     };
 
+    // Hiện thanh điều khiển khi di chuột vào vùng video
     const handleHoverContainer = () => {
         setShowProcessBar(true);
 
@@ -178,7 +204,7 @@ function FilmViewer() {
             clearTimeout(timeoutRef.current);
         }
 
-        // Đặt lại timeout 4 giây
+        // Đặt lại timeout 4 giây để ẩn thanh điều khiển
         timeoutRef.current = setTimeout(() => {
             setShowProcessBar(false);
         }, 4000);
@@ -189,6 +215,7 @@ function FilmViewer() {
         }
     };
 
+    // Ẩn thanh điều khiển khi di chuột ra khỏi vùng video
     const handleOutContainer = () => {
         setShowProcessBar(false);
     };
@@ -200,6 +227,7 @@ function FilmViewer() {
         >
             <div className="flex flex-col items-center justify-center">
                 <div className={`w-full ${!fullScreen && "max-w-7xl"}`}>
+                    {/* Hiển thị tên phim và tập khi không ở chế độ toàn màn hình */}
                     {!fullScreen && (
                         <h4 className="text-white text-2xl font-Roboto font-bold mb-4 text-left">
                             {film?.movie?.name} {epsFilm && "-"} {epsFilm}
@@ -207,20 +235,22 @@ function FilmViewer() {
                     )}
 
                     <div
-                        className={`video-container cursor-pointer relative w-full`}
+                        className={`video-container bg-black cursor-pointer relative w-full`}
                         onClick={handlePlayPause}
                         onDoubleClick={toggleFullScreen}
                         onMouseOver={() => handleHoverContainer()}
                         onMouseOut={() => handleOutContainer()}
                     >
+                        {/* Hiển thị trạng thái đang tải */}
                         {loading ? (
                             <div className="p-4 text-white flex items-center justify-center gap-10 h-[500px] border-2 border-gray-700 select-none">
                                 <FontAwesomeIcon icon={faSpinner} className="animate-spin text-7xl" />
                                 <p className="text-xl">Đang tải phim</p>
                             </div>
                         ) : videoSrc ? (
+                            /* Hiển thị video nếu có nguồn */
                             <VideoPlayer
-                                onMouseOver={() => handleHoverContainer()} // Nhấn đúp để phóng to
+                                onMouseOver={() => handleHoverContainer()}
                                 onMouseOut={() => handleOutContainer()}
                                 url={videoSrc}
                                 playing={isPlaying}
@@ -232,12 +262,14 @@ function FilmViewer() {
                                 fullScreen={fullScreen}
                             />
                         ) : (
+                            /* Hiển thị thông báo lỗi nếu không có nguồn */
                             <div className="p-4 text-gray-500 flex items-center justify-center gap-5 h-[500px] border-2 border-gray-700 select-none">
                                 <FontAwesomeIcon icon={faTriangleExclamation} className="text-7xl" />
                                 <p className="text-2xl">Phim đã bị lỗi</p>
                             </div>
                         )}
 
+                        {/* Thanh điều khiển video - hiển thị nếu đang phát và di chuột vào, hoặc luôn hiển thị khi tạm dừng */}
                         <PlayerControls
                             isShow={videoSrc && isPlaying ? ShowProcessBaar : true}
                             isPlaying={isPlaying}
@@ -264,6 +296,8 @@ function FilmViewer() {
                     </div>
                 </div>
             </div>
+
+            {/* Phần hiển thị danh sách tập phim */}
             <div className="mb-[100px]">
                 {film?.episodes?.map((item, i) => (
                     <EpisodesSelection episodes={item} key={i} />

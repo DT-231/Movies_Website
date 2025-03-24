@@ -1,8 +1,6 @@
 @import "tailwindcss";
 @plugin 'tailwind-scrollbar';
 
-
-
 @font-face {
     font-family: Lora;
     src: url("@/assets/Fonts/Lora-Bold.ttf");
@@ -21,7 +19,7 @@
     --color-bgSearch: #2a2a2a;
     --color-subtitle: #888888;
     /* --color-subtitle: #888888; */
-    --color-hotPink:#FF69B4;
+    --color-hotPink: #ff69b4;
     --font-Lora: "Lora", "serif";
     --font-Roboto: "Roboto", "sans-serif";
     --font-Popin: "Popin", "sans-serif";

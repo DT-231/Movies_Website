@@ -63,10 +63,10 @@ const VideoPlayer = ({
             onProgress={onProgress} // Gửi tiến trình phát lại
             onDuration={onDuration} // Lấy tổng thời lượng video
             width="100%" // Chiều rộng video
-            height={fullScreen ? "100vh" : "70vw"} // Chiều cao video theo chế độ toàn màn hình hoặc bình thường
+            height={fullScreen ? "100vh" : "90vw"} // Chiều cao video theo chế độ toàn màn hình hoặc bình thường
             style={{
-                maxHeight: fullScreen ? "100vh" : "80vh", // Giới hạn chiều cao video
-                backgroundColor: "#000", // Màu nền của trình phát
+                maxHeight: fullScreen ? "100vh" : "100vh", // Giới hạn chiều cao video
+                // Màu nền của trình phát
             }}
         />
     );
