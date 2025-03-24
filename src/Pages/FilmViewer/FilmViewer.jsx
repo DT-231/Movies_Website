@@ -176,14 +176,15 @@ function FilmViewer() {
 
     // Bật/tắt chế độ toàn màn hình
     const toggleFullScreen = () => {
-        if (videoSrc) {
-            if (!document.fullscreenElement) {
-                containerRef.current.requestFullscreen();
-                setFullScreen(true);
-            } else {
-                document.exitFullscreen();
-                setFullScreen(false);
-            }
+        const videoElement = playerRef.current?.getInternalPlayer(); // Lấy thẻ <video>
+        if (videoElement?.webkitEnterFullscreen) {
+            videoElement.webkitEnterFullscreen(); // Dành riêng cho iOS
+        } else if (containerRef.current.requestFullscreen) {
+            containerRef.current.requestFullscreen();
+        } else if (containerRef.current.mozRequestFullScreen) {
+            containerRef.current.mozRequestFullScreen();
+        } else if (containerRef.current.msRequestFullscreen) {
+            containerRef.current.msRequestFullscreen();
         }
     };
 
