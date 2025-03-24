@@ -1,0 +1,28 @@
+@import "tailwindcss";
+@plugin 'tailwind-scrollbar';
+
+
+
+@font-face {
+    font-family: Lora;
+    src: url("@/assets/Fonts/Lora-Bold.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Lora;
+    src: url("@/assets/Fonts/Lora-Regular.ttf");
+    font-weight: 700;
+}
+
+@theme {
+    --color-primary: #1a1a1a;
+    --color-secondary: #121212;
+    --color-bgSearch: #2a2a2a;
+    --color-subtitle: #888888;
+    /* --color-subtitle: #888888; */
+    --color-hotPink:#FF69B4;
+    --font-Lora: "Lora", "serif";
+    --font-Roboto: "Roboto", "sans-serif";
+    --font-Popin: "Popin", "sans-serif";
+}
