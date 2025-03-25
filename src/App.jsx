@@ -7,7 +7,7 @@ import { publicRoutes } from "./Routes/router";
 function App() {
     return (
         <Router>
-            <div className="w-full min-h-screen">
+            <div className="w-full min-h-screen bg-primary">
                 <Routes>
                     {publicRoutes.map((route, index) => {
                         let Layout = DefaultLayout;

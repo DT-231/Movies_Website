@@ -63,7 +63,7 @@ const VideoPlayer = ({
             muted={muted} // Trạng thái tắt/bật âm thanh
             onProgress={onProgress} // Gửi tiến trình phát lại
             onDuration={onDuration} // Lấy tổng thời lượng video
-            width="100vw" // Đảm bảo video chiếm toàn bộ chiều rộng màn hình
+            width="100%" // Đảm bảo video chiếm toàn bộ chiều rộng màn hình
             height={fullScreen ? "100vh" : "56.25vw"} // Tỷ lệ 16:9 khi không ở chế độ toàn màn hình
             style={{
                 maxHeight: fullScreen ? "100vh" : "100vh", // Đảm bảo không bị hở

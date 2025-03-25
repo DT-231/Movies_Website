@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import imgs from "@/assets/IMGS";
 import { getGenre, getCountry } from "@/Service/FilmService";
 import { useEffect } from "react";
@@ -9,17 +9,17 @@ import Search from "../Search/Search";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function Header() {
-    const [genreList, setGenreList] = useState({}); // Danh sách thể loại 
-    const [CountryList, setCountryList] = useState({}); // Danh sách quốc gia 
+    const [genreList, setGenreList] = useState({}); // Danh sách thể loại
+    const [CountryList, setCountryList] = useState({}); // Danh sách quốc gia
     const [isMenuOpen, setIsMenuOpen] = useState(false); // Trạng thái mở menu
 
     useEffect(() => {
         // Lấy danh sách thể loại
-        const fetchGenre = async () => { 
+        const fetchGenre = async () => {
             let res = await getGenre();
             if (res) setGenreList(res);
         };
-        // Lấy danh sách quốc gia 
+        // Lấy danh sách quốc gia
         const fetchCountry = async () => {
             let res = await getCountry();
             if (res) setCountryList(res);
@@ -30,7 +30,7 @@ function Header() {
     }, []);
 
     return (
-        <header className="flex 2xl:justify-around justify-between items-center px-5 w-screen sm:px-10 py-3 sm:py-5 bg-primary text-white relative">
+        <header className="flex 2xl:justify-around justify-between items-center px-5  sm:px-10 py-3 sm:py-5 bg-primary text-white relative">
             {/* Logo */}
             <Link to="/" className="w-24 sm:w-3xs cursor-pointer">
                 <img src={imgs.logo} alt="PinkLlix-Web xem phim trực tuyến miễn phí" />

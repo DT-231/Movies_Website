@@ -225,19 +225,28 @@ function FilmViewer() {
     return (
         <div
             ref={containerRef}
-            className={`bg-secondary min-h-screen w-screen flex flex-col gap-10 ${!fullScreen && "py-30 "}pb-[10px]`}
+            className={`bg-secondary min-h-screen  max-w-[100vw]  flex flex-col gap-10 ${
+                !fullScreen && "py-30 "
+            } pb-[10px] `}
         >
-            <div className="flex flex-col items-center justify-center">
-                <div className={`w-full ${!fullScreen && "max-w-7xl"}`}>
+            <div className="grid place-items-center w-full">
+                <div className={`w-full ${!fullScreen && "max-w-7xl"} `}>
                     {/* Hiển thị tên phim và tập khi không ở chế độ toàn màn hình */}
                     {!fullScreen && (
-                        <h4 className="text-white text-2xl font-Roboto font-bold mb-4 text-left">
-                            {film?.movie?.name} {epsFilm && "-"} {epsFilm}
+                        <h4
+                            className="text-white text-2xl font-Roboto font-bold mb-4 
+                          xl:text-left 
+                          max-xl:text-center 
+                          max-xl:px-[10%] 
+                          "
+                        >
+                            {film?.movie?.name}
+                            {epsFilm && <span className="max-md:mt-2">- {epsFilm}</span>}
                         </h4>
                     )}
 
                     <div
-                        className={`video-container bg-black cursor-pointer relative w-full`}
+                        className={`video-container bg-black cursor-pointer relative xl:w-full w-[80%] mx-auto`}
                         onClick={handlePlayPause}
                         onDoubleClick={toggleFullScreen}
                         onMouseOver={() => handleHoverContainer()}
@@ -300,7 +309,7 @@ function FilmViewer() {
             </div>
 
             {/* Phần hiển thị danh sách tập phim */}
-            <div className="mb-[100px]">
+            <div className="mb-[100px] flex  ">
                 {film?.episodes?.map((item, i) => (
                     <EpisodesSelection episodes={item} key={i} />
                 ))}
