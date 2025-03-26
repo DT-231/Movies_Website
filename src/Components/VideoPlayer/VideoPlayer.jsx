@@ -66,7 +66,7 @@ const VideoPlayer = ({
             width="100%" // Đảm bảo video chiếm toàn bộ chiều rộng màn hình
             height={fullScreen ? "100vh" : "56.25vw"} // Tỷ lệ 16:9 khi không ở chế độ toàn màn hình
             style={{
-                maxHeight: fullScreen ? "100vh" : "100vh", // Đảm bảo không bị hở
+                maxHeight: fullScreen ? "100vh" : "70vh", // Đảm bảo không bị hở
             }}
         />
     );
