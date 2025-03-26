@@ -82,9 +82,7 @@ function FilmDetail() {
                         <div className="flex flex-row py-5 gap-10">
                             {resultFilm?.episodes && resultFilm.episodes.length > 0 && (
                                 <Link
-                                    to={`/phim/${slugFilm}/${
-                                        resultFilm.episodes[selectedServer]?.server_data?.[0]?.slug
-                                    }/${getAudioType(resultFilm.episodes[selectedServer]?.server_name || "")}`}
+                                    to={`/phim/${slugFilm}/${resultFilm.episodes[0]?.server_data?.[0]?.slug}/vietsub`}
                                     className="text-2xl bg-hotPink font-Popin font-bold px-10 py-5 rounded-full"
                                 >
                                     Xem phim
