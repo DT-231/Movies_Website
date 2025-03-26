@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 
 function EpisodesButton({ data, server }) {
     let { slugFilm } = useParams();
+    
     return (
         <Link
             to={`/phim/${slugFilm}/${data.slug}/${server}`}

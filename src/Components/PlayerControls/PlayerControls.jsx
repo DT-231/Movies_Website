@@ -12,7 +12,6 @@ const PlayerControls = ({
     played, // Thời gian đã phát của video
     onSeek, // Hàm xử lý khi người dùng kéo thanh tiến trình
     duration, // Tổng thời lượng của video
-    formatTime, // Hàm định dạng thời gian
     onBackward, // Hàm xử lý tua ngược
     onForward, // Hàm xử lý tua nhanh
     isMuted, // Trạng thái tắt/bật âm thanh
@@ -28,6 +27,13 @@ const PlayerControls = ({
     onVolumeTouchMove, // Hàm xử lý khi di chuyển tay trên thanh âm lượng
     onVolumeTouchEnd, // Hàm xử lý khi kết thúc chạm vào thanh âm lượng
 }) => {
+    // Định dạng thời gian thành MM:SS
+    const formatTime = (seconds) => {
+        if (!seconds) return "00:00";
+        const minutes = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+    };
     return (
         <div
             className={`absolute bottom-0 left-0 right-0 bg-black/50 p-4  text-white z-10 ${

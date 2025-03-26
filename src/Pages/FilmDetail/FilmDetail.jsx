@@ -11,7 +11,6 @@ function FilmDetail() {
     let { slugFilm } = useParams(); // Lấy tham số từ URL (slug của phim)
     const [filmDetail, setFilmDetail] = useState({}); // Lưu thông tin chi tiết của phim
     const [resultFilm, setResultFilm] = useState({}); // Lưu dữ liệu tập phim và máy chủ phát
-    const [selectedServer, setSelectedServer] = useState(0); // Lưu chỉ mục máy chủ đang được chọn
     const [loading, setLoading] = useState(true); // Trạng thái tải dữ liệu
 
     useEffect(() => {
@@ -37,13 +36,6 @@ function FilmDetail() {
         ));
     };
 
-    // Hàm xác định loại âm thanh của server
-    const getAudioType = (serverName) => {
-        if (serverName.includes("Vietsub")) return "vietsub";
-        if (serverName.includes("Thuyết Minh")) return "TM";
-        return "Unknown";
-    };
-
     return (
         <div className="w-full h-auto bg-secondary py-10 px-4">
             <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 lg:gap-10">
@@ -66,7 +58,7 @@ function FilmDetail() {
                     <div className="text-white font-Roboto flex flex-col gap-3 bg-primary w-full p-4 rounded-2xl">
                         <h3 className="text-3xl lg:text-5xl font-bold">{filmDetail.name}</h3>
                         <h5 className="text-xl lg:text-2xl text-hotPink">Tên khác: {filmDetail.origin_name}</h5>
-                        
+
                         {/* Thông tin chi tiết về phim */}
                         <div className="text-base lg:text-xl flex flex-col gap-2">
                             <p>Đạo diễn: {filmDetail.director}</p>
@@ -118,33 +110,9 @@ function FilmDetail() {
                     <ExpandableText text={decodeHtmlEntities(filmDetail.content)} />
                 </div>
 
-                {/* Chọn phiên bản âm thanh nếu có nhiều server */}
+                {/*Chọn phiên bản âm thanh nếu có nhiều server và Hiển thị danh sách tập phim theo server được chọn */}
                 {resultFilm?.episodes && resultFilm.episodes.length > 1 && (
-                    <div className="mt-10">
-                        <h5 className="text-3xl font-Roboto font-bold text-center text-white mb-5">
-                            Chọn phiên bản âm thanh
-                        </h5>
-                        <div className="flex justify-center gap-4 mb-10">
-                            {resultFilm.episodes.map((server, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setSelectedServer(index)}
-                                    className={`px-6 py-3 rounded-lg font-bold text-lg ${
-                                        selectedServer === index ? "bg-hotPink text-white" : "bg-gray-700 text-gray-300"
-                                    }`}
-                                >
-                                    {getAudioType(server.server_name)}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Hiển thị danh sách tập phim theo server được chọn */}
-                {resultFilm?.episodes && resultFilm.episodes.length > 0 && (
-                    <div>
-                        <EpisodesSelection episodes={resultFilm.episodes[selectedServer]} />
-                    </div>
+                    <EpisodesSelection episodes={resultFilm.episodes} />
                 )}
             </div>
         </div>
