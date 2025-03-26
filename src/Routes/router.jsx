@@ -8,7 +8,7 @@ const publicRoutes = [
     { path: "/home", component: Home },
     { path: "/:type/:slug", component: Products },
     { path: "/phim/:slugFilm", component: FilmDetail },
-    { path: "/phim/:slugFilm/:episode/:server", component: FilmViewer },
+    { path: "/xem-phim/:slugFilm/:episode/:server", component: FilmViewer }, // Thêm route này
 ];
 
 export { publicRoutes };

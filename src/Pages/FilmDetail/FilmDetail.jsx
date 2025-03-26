@@ -82,7 +82,7 @@ function FilmDetail() {
                         <div className="flex flex-row py-5 gap-10">
                             {resultFilm?.episodes && resultFilm.episodes.length > 0 && (
                                 <Link
-                                    to={`/phim/${slugFilm}/${resultFilm.episodes[0]?.server_data?.[0]?.slug}/vietsub`}
+                                    to={`/xem-phim/${slugFilm}/${resultFilm.episodes[0]?.server_data?.[0]?.slug}/vietsub`}
                                     className="text-2xl bg-hotPink font-Popin font-bold px-10 py-5 rounded-full"
                                 >
                                     Xem phim
@@ -109,9 +109,7 @@ function FilmDetail() {
                 </div>
 
                 {/*Chọn phiên bản âm thanh nếu có nhiều server và Hiển thị danh sách tập phim theo server được chọn */}
-                {resultFilm?.episodes && resultFilm.episodes.length > 1 && (
-                    <EpisodesSelection episodes={resultFilm.episodes} />
-                )}
+                {resultFilm?.episodes && <EpisodesSelection episodes={resultFilm.episodes} />}
             </div>
         </div>
     );

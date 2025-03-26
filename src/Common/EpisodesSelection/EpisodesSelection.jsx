@@ -7,6 +7,7 @@ function EpisodesSelection({ episodes }) {
     const getAudioType = (serverName) => {
         if (serverName.includes("Vietsub")) return "vietsub";
         if (serverName.includes("Thuyết Minh")) return "Thuyết minh";
+        if (serverName.includes("Lồng Tiếng")) return "Lồng Tiếng";
         return "Unknown";
     };
     return (
