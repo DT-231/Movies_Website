@@ -6,8 +6,8 @@ const FullScreenButton = ({ fullScreen, onClick }) => {
         <FontAwesomeIcon
             icon={fullScreen ? faDownLeftAndUpRightToCenter : faUpRightAndDownLeftFromCenter}
             onClick={(e) => {
-                e.stopPropagation();
                 onClick();
+                e.stopPropagation();
             }}
             className="cursor-pointer text-2xl"
         />
